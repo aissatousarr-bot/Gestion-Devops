@@ -186,16 +186,7 @@ PUT    /api/classrooms/{id} - Modifier une classe
 DELETE /api/classrooms/{id} - Supprimer une classe
 ```
 
-## 👥 Contribution
-Les contributions sont les bienvenues ! Veuillez suivre ces étapes :
-1. Forker le projet
-2. Créer une branche pour votre fonctionnalité
-3. Commiter vos changements
-4. Pousser vers la branche
-5. Ouvrir une Pull Request
 
 
-## 📞 Contact
-- 📧 Email : mbackembaye74@gmail.com
-- 🌐 Site Web : www.malcolm-dev.com
-- 💼 LinkedIn : https://linkedin.com/in/bayembacke221
+
+
