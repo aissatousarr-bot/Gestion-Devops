@@ -40,11 +40,16 @@ jobs:
       - name: 📦 Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: 🔑 Set Up Environment File
+        run: |
+          cp .env.example .env
+          cp .env .env.testing
+          php artisan key:generate --env=testing
+          php artisan config:clear
+          php artisan config:cache
+
       - name: 🛠 Run Migrations
         run: php artisan migrate --env=testing --force
-
-      - name: 🔑 Generate Laravel Application Key
-        run: php artisan key:generate --env=testing
 
       - name: 🧪 Run Unit Tests
         run: php artisan test --env=testing
@@ -116,9 +121,3 @@ jobs:
     steps:
       - name: 📊 Setup Monitoring (CPU, RAM, Disk, Requests, Logs)
         run: |
-          echo "Collecting metrics..."
-          echo "CPU Usage: $(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')%" > monitoring.log
-          echo "Memory Usage: $(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')" >> monitoring.log
-          echo "Disk Usage: $(df -h | awk '$NF=="/"{printf "%s", $5}')" >> monitoring.log
-          echo "Requests per Hour: $(cat /var/log/nginx/access.log | wc -l)" >> monitoring.log
-          cat monitoring.log
