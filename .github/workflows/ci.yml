@@ -14,18 +14,6 @@ jobs:
   # 📌 1. Build et Tests
   build-and-test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root  # Mot de passe pour l'utilisateur root
-          MYSQL_DATABASE: school_management
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping --host=localhost --user=root --password=root" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: 🔄 Checkout Repository
         uses: actions/checkout@v4
@@ -39,14 +27,6 @@ jobs:
 
       - name: 📦 Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: 🔑 Set Up Environment File
-        run: |
-          cp .env.example .env
-          cp .env .env.testing
-          php artisan key:generate --env=testing
-          php artisan config:clear
-          php artisan config:cache
 
       - name: 🛠 Run Migrations
         run: php artisan migrate --env=testing --force
