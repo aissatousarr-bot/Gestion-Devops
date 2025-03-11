@@ -28,6 +28,14 @@ jobs:
       - name: 📦 Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: 🔑 Set Up Environment File
+        run: |
+          cp .env.example .env
+          cp .env .env.testing
+          php artisan key:generate --env=testing
+          php artisan config:clear
+          php artisan config:cache
+
       - name: 🛠 Run Migrations
         run: php artisan migrate --env=testing --force
 
