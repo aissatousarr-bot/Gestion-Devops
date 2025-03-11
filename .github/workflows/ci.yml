@@ -14,6 +14,18 @@ jobs:
   # 📌 1. Build et Tests
   build-and-test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: school_management
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping --host=localhost --user=root --password=root" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: 🔄 Checkout Repository
         uses: actions/checkout@v4
@@ -22,7 +34,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: mbstring, pdo, bcmath
+          extensions: mbstring, pdo, bcmath, pdo_mysql
           tools: composer
 
       - name: 📦 Install Composer Dependencies
@@ -35,6 +47,14 @@ jobs:
           php artisan key:generate --env=testing
           php artisan config:clear
           php artisan config:cache
+
+      - name: 🕒 Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL to start..."
+          until mysqladmin ping --host=127.0.0.1 --user=root --password=root --silent; do
+            sleep 2
+          done
+          echo "MySQL is up and running!"
 
       - name: 🛠 Run Migrations
         run: php artisan migrate --env=testing --force
