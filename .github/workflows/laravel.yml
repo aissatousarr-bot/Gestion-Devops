@@ -3,32 +3,35 @@ name: Laravel
 on: [push, pull_request]
 
 jobs:
+  laravel:
+    runsflows/laravel.yml` file to use a PHP version compatible with the package requirements. For example, update the-on: ubuntu-latest
+
+    steps:
+    - uses: actions PHP version to 8.2.
+
+```yaml
+name: Laravel
+
+on: [push, pull_request]
+
+jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu/checkout@v2
+    - name: Set up PHP
+      uses: shiv-latest
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: your_database
+          MYSQL_ROOT_PASSWORDammathur/setup-php@v2
+      with:
+        php-version:: password
         ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up PHP 8.2
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'  # Ensure PHP version 8.2 is used
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
-
-      - name: Validate composer.json
-        run: composer validate
-
-      - name: Run tests
-        run: php artisan test
+          - 3306 8.2
+    - name: Install dependencies
+      run: composer install
+    - name: Run tests
+      run: php artisan test:3306
+        options: >-
+          --health-cmd="
